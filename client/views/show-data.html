@@ -1,0 +1,30 @@
+<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+    <label for="search"> Find: </label>
+    <input style="width: 40%; margin-left: 0%;" class="form-control" id="search" name="search" type="text"
+            ng-model="vm.search">
+</div><br>
+<div class="container"></div>
+<table style="background-color:rgb(73, 177, 226)" class="table table-hover table-striped table-bordered">
+    <tbody>
+        <tr>
+            <th>NAME</th>
+            <th>BRANCH</th>
+            <th>MARKS</th>
+            <th>SCHOOL</th>
+            <th>PLACE</th>
+        </tr>
+        <tr ng-repeat="item in posts | filter:vm.search">
+            <td>{{ item.name }}</td>
+            <td>{{ item.branch}}</td>
+            <td>{{ item.marks }}</td>
+            <td>{{ item.school }}</td>
+            <td>{{ item.place }}</td>
+        </tr>
+    </tbody>
+</table>
+<div class="text-center">
+    <!-- <button ng-click=back()>prev</button>
+    <button ng-click=forv() ng-disabled="posts.length < 5">next</button> -->
+    <pagination ng-model="currentPage" total-items="totalItems" num-pages="numPages" max-size="6"
+        ng-change="pageChange()" items-per-page="itemPerPage" boundary-links="true">
+    </pagination>

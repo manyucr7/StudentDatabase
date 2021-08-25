@@ -1,0 +1,25 @@
+<div class="panel panel-default " style="width: 50%;margin: 0 auto;">
+    <div class="panel-heading" align="center"
+        style="background-color:coral;color: black;font-weight: bold;font-size: large; text-decoration: underline;">Add query to get top three
+        Students</div>
+    <form style="outline: auto;" class="jumbotron text-center" name="myForm">
+        <div style=" background-color:rgb(127, 205, 247);" class="panel-body">
+            <label for="query">Branch Query</label><br>
+            <input style="width: 50%; margin-left: 25%;" class="form-control" type="text" id="query" name="query"
+                placeholder="branch">
+            <button class="btn btn-primary" ng-click="branchfunc()">TOP THREE</button><br><br>
+            <div style=" background-color:rgb(127, 205, 247);">
+                <ul align="left" ng-repeat="v in val">
+                    <li>{{v.name + ' - '+ v.marks}}</li>
+                </ul>
+            </div>
+            <label for="query2">Place Query</label><br>
+            <input style="width: 50%;margin-left: 25%;" class="form-control" type="text" id="query2" name="query2"
+                placeholder="place">
+            <button class="btn btn-primary" ng-click="placefunc()">TOP THREE</button><br><br>
+            <ul align="left" ng-repeat="v in val2">
+                <li>{{v.name + ' - '+ v.marks}}</li>
+            </ul>
+        </div><br>
+    </form>
+</div>
