@@ -27,7 +27,6 @@ router.get('/totalpages', (req, res) => {
      Post.find().then(data=>{
         res.json(data);
     })
-    
 
     // cursorData.on("data", (data) => {
     //     console.log("pages calculated")
@@ -110,8 +109,6 @@ router.post('/create', (req, res) => {
         res.status(404).send('Operation failed ' + err)
     })
 
-
 })
-
 
 module.exports = router;

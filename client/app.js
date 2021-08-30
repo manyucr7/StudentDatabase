@@ -13,7 +13,7 @@ app.controller('myCtrl', function ($scope, $http,$location) {
 app.directive('myDirective', function () {
     return {
         require: 'ngModel',
-        link: function (scope, element, attributes, control) {
+        link: function (control) {
             control.$validators.myDirective = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value
@@ -35,7 +35,7 @@ app.directive('myDirective', function () {
 app.directive('adult', function () {
     return {
         require: 'ngModel',
-        link: function (scope, element, attributes, control) {
+        link: function (control) {
             control.$validators.adult = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value
@@ -57,7 +57,7 @@ app.directive('adult', function () {
 app.directive('field', function () {
     return {
         require: 'ngModel',
-        link: function (scope, element, attributes, control) {
+        link: function (control) {
             control.$validators.field = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value

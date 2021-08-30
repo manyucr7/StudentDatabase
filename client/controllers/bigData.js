@@ -25,7 +25,6 @@ app.controller('bigData', function ($scope, $http,$location) {
                 console.log(err);
             })
         }
-
     }
     $scope.val2 = '';
     $scope.placefunc = function () {
