@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='myApp'>
+
 <head>
     <link rel="shortcut icon" href="#">
     <meta charset="UTF-8">
@@ -11,12 +12,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.7.7/angular-route.min.js"
         integrity="sha512-hA6PexsEPU6IEla/LCD+1kRcSzZzPL3XV0I2m3/wscW5b2SIFLtGKUuRsC3nRILwmq2lnpCsF75LvSPAJBy/NQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.8.2/angular-resource.min.js"
+        integrity="sha512-heHqDjSgQ/iDnrNQqj9WFFYIS9nKYnWwb3VndZOvW1riVCWN9gsr98JEptFqmBl8Ru+3ubuGcHCYe2RJnA2PnA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script data-require="ui-bootstrap@*" data-semver="0.12.1"
         src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
     </script>
 
-    <script src="routes.js"></script>
     <script src="app.js"></script>
     <script src="./controllers/bigData.js"></script>
     <script src="./controllers/loginUpData.js"></script>
@@ -27,8 +29,8 @@
 </head>
 
 <body>
-    <div ng-controller='myCtrl' >
-        <nav class="navbar navbar-inverse" role="navigation" >
+    <div ng-controller='myCtrl'>
+        <nav class="navbar navbar-inverse" role="navigation">
             <div class="navbar-header">
                 <a class="navbar-brand">POSist</a>
             </div>

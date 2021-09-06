@@ -5,7 +5,7 @@ const authController = require('./authController');
 
 router.post('/signup', authController.signup_post);
 router.post('/login', authController.login_post);
-router.get('/logout',authController.logout_get)
+router.get('/logout', authController.logout_get)
 
 router.post("/", (req, res) => {
     const pageOptions = {
@@ -16,16 +16,18 @@ router.post("/", (req, res) => {
         .skip(pageOptions.page * pageOptions.limit)
         .limit(pageOptions.limit)
         .exec(function (err, doc) {
-            if (err) { res.status(500).json(err); return; };
+            if (err) {
+                res.status(500).json(err);
+                return;
+            };
             res.status(200).json(doc);
         });
-
-
 });
 router.get('/totalpages', (req, res) => {
 
-     Post.find().then(data=>{
+    Post.find().then(data => {
         res.json(data);
+        res.status(200);
     })
 
     // cursorData.on("data", (data) => {
@@ -54,10 +56,9 @@ router.post('/myposts', (req, res) => {
             { $limit: 3 }
         ]).then(data => {
             res.json(data)
+        }).catch(err => {
+            res.sendStatus(404);
         })
-            .catch(err => {
-                res.sendStatus(404);
-            })
     }
 })
 router.post('/place', (req, res) => {
@@ -70,6 +71,7 @@ router.post('/place', (req, res) => {
         { $limit: 3 }
     ]).then(data => {
         res.json(data)
+        res.status(200);
     })
         .catch(err => {
             res.sendStatus(404);
@@ -105,6 +107,7 @@ router.post('/create', (req, res) => {
         })
     bulk.execute().then(response => {
         res.json(response.result.nMatched);
+        res.status(200);
     }).catch(err => {
         res.status(404).send('Operation failed ' + err)
     })

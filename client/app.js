@@ -1,5 +1,5 @@
-var app = angular.module('myApp',  ['ngRoute','ui.bootstrap']);
-app.controller('myCtrl', function ($scope, $http,$location) {
+var app = angular.module('myApp', ['ngRoute', 'ui.bootstrap', 'ngResource']);
+app.controller('myCtrl', function ($scope, $http, $location) {
     $scope.logout = function () {
         $http.get("http://localhost:3000/logout").then(function (response) {
             console.log(response);
@@ -7,13 +7,12 @@ app.controller('myCtrl', function ($scope, $http,$location) {
         $location.path("/");
     };
     $scope.currentPath = $location.path();
-    console.log($scope.currentPath);
-    
+
 })
 app.directive('myDirective', function () {
     return {
         require: 'ngModel',
-        link: function (control) {
+        link: function (scope, element, attributes, control) {
             control.$validators.myDirective = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value
@@ -35,7 +34,7 @@ app.directive('myDirective', function () {
 app.directive('adult', function () {
     return {
         require: 'ngModel',
-        link: function (control) {
+        link: function (scope, element, attributes, control) {
             control.$validators.adult = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value
@@ -57,7 +56,7 @@ app.directive('adult', function () {
 app.directive('field', function () {
     return {
         require: 'ngModel',
-        link: function (control) {
+        link: function (scope, element, attributes, control) {
             control.$validators.field = function (modelValue, viewValue) {
 
                 if (control.$isEmpty(modelValue)) // if empty, correct value
@@ -76,4 +75,45 @@ app.directive('field', function () {
         }
     };
 });
+app.service('serviceX', function ($http, $location) {
+    this.loginData = function () {
+        let url = "http://localhost:3000/login";
+        let data = {
+            gname: gname.value,
+            pw: pw.value,
+        }
+        $http.post(url, data).then(res => {
+            console.log(res);
+            if (res.data.user) {
+                console.log(res.data.user);
+                $location.path('/show');
+            }
+        })
 
+    };
+    this.signUp = function () {
+        let url = "http://localhost:3000/signup";
+        let data = {
+            gname: gname.value,
+            pw: pw.value,
+        }
+        $http.post(url, data).then(res => {
+            console.log(res);
+            if (res.data.usr) {
+                console.log(res.data.usr);
+                $location.path('/');
+            }
+        })
+
+    };
+
+});
+// app.factory('Posts', function ($resource) {
+//     return $resource('http://localhost:3000/posts',null,
+// 	{
+// 	    'save':  {method:'POST', isArray:true} 
+// 	});
+// });
+// app.factory('totalPages', function ($resource) {
+//     return $resource('http://localhost:3000/totalpages');
+// });

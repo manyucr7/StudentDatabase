@@ -6,29 +6,34 @@ var cors = require('cors')
 const alienRouter = require('./router')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  //check json web token exists & is verified
-  if (token) {
-    jwt.verify(token, 'secret key', (err, decodedToken) => {
-      if (err) {
-        console.log(err.message);
-        res.redirect('/');
-      }else {
-        console.log(decodedToken);
-        next();
-      }
-    })
-  }
-  else{
-    res.send('');
-  }
-}
+var passport=require('passport');
+require('./config/passport')(passport);
+// const passport.authenticate('jwt', {session: false}) = (req, res, next) => {
+//   const token = req.cookies.jwt;
+//   //check json web token exists & is verified
+//   if (token) {
+//     jwt.verify(token, 'secret key', (err, decodedToken) => {
+//       if (err) {
+//         console.log(err.message);
+//         res.status(401);
+//         res.redirect('/');
+//       }else {
+//         res.status(200);
+//         console.log(decodedToken);
+//         next();
+//       }
+//     })
+//   }
+//   else{
+//     res.send('');
+//   }
+// }
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('client'))
 app.use(cookieParser());
 app.use(alienRouter)
+app.use(passport.initialize());
 
 mongoose.connect("mongodb+srv://manyu123:manyucr7@rest.xkl2a.mongodb.net/db?retryWrites=true&w=majority",
   {
@@ -43,10 +48,10 @@ mongoose.connect("mongodb+srv://manyu123:manyucr7@rest.xkl2a.mongodb.net/db?retr
     process.exit(-1)
   })
 
-app.use('/', requireAuth,alienRouter)
-app.use('/posts', requireAuth, alienRouter)
-app.use('/myposts', requireAuth, alienRouter)
-app.use('/place', requireAuth, alienRouter)
-app.use('/seed', requireAuth, alienRouter)
-app.use('/create',requireAuth,alienRouter)
+app.use('/', passport.authenticate('jwt', {session: false}),alienRouter)
+app.use('/posts', passport.authenticate('jwt', {session: false}), alienRouter)
+app.use('/myposts', passport.authenticate('jwt', {session: false}), alienRouter)
+app.use('/place', passport.authenticate('jwt', {session: false}), alienRouter)
+app.use('/seed', passport.authenticate('jwt', {session: false}), alienRouter)
+app.use('/create',passport.authenticate('jwt', {session: false}),alienRouter)
 app.listen(3000)

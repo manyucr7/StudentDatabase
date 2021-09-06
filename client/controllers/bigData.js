@@ -7,14 +7,8 @@ app.controller('bigData', function ($scope, $http,$location) {
     $scope.val = '';
     if(!document.cookie){
         $location.path('/');
+        console.log('Unauthorized User')
     }
-    // $scope.logout = function () {
-    //     $http.get("http://localhost:3000/logout").then(function (response) {
-    //         console.log(response);
-    //     });
-    //     $location.path("/login");
-    // };
-
     $scope.branchfunc = function () {
         if (query.value) {
             let queryy = { name: query.value }
