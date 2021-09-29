@@ -1,43 +1,83 @@
-<div  style="width: 50%;margin: 0 auto;" class="panel panel-default">
-  <div class="panel-heading" align="center" style="background-color:coral;color: black;font-weight: bold;font-size: large; text-decoration: underline;">Add Students Data</div>
-  <form style="outline: auto; background-color:rgb(127, 205, 247);"  class="jumbotron text-center" name="myForm">
-    <div class="panel-body" ></div>
-    <label for="fname">First name:</label><br>
-    <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="fname" name="fname" ng-model="fname" my-directive><br>
-    <span style="color:red;" ng-show="myForm.fname.$error.myDirective">
-      add valid name</span><br>
-    <label for="branch">Branch:</label><br>
-    <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="branch" name="branch" ng-model="branch" field><br>
-    <span style="color:red;" ng-show="myForm.branch.$error.field">
-      add valid branch</span><br>
-    <label for="marks">Total Marks:</label><br>
-    <input style="width: 50%; margin-left: 25%;" type="number" class="form-control" id="marks" name="marks" ng-model="marks" adult /><br>
-    <span style="color:red;" ng-show="myForm.marks.$error.adult">
-      Should be => 0 and <= 100</span><br>
-        <label for="school">Choose Your School</label>
-        <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example" id="school" name="school">
-          <option value="DPS RK Puram">DPS RK Puram</option>
-          <option value="DPS Nangloi">DPS Nangloi</option>
-          <option value="DPS Krishna Nagar">DPS Krishna Nagar</option>
-          <option value="Sr, Sec GOVT. School">Sr, Sec GOVT. School</option>
-          <option value="The Doon School">The Doon School</option>
-        </select>
-        <label for="place">Choose Place</label>
-        <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example" id="place" name="place">
-          <option value="north">north</option>
-          <option value="south">south</option>
-          <option value="east">east</option>
-          <option value="west">west</option>
-        </select>
-        <button type="submit" class="btn btn-danger" ng-click='consoleData()' ng-disabled="myForm.fname.$invalid">Add
-          Details</button><br><hr style=" background-color: black; height: 1px; border: 0;">
-          <label for="query3">SEED</label><br>
-          <input style="width: 50%; margin-left: 25%;" type="number" class="form-control" id="query3" name="query3" placeholder="seed value">
-          <button type="button" ng-click="seed()" class="btn btn-primary">Seed</button><br><br>
-        <br><br>
-        
+<nav class="navbar navbar-expand-lg navbar-light bg-light"" role=" navigation">
+  <button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed"><i class="fa fa-angle-double-down"
+      style="font-size:30px"></i></button>
+  <div uib-collapse="isCollapsed">
+    <ul class="nav navbar-nav">
+      <li><a style="background-color: coral;" class="btn btn-default" href="#!analytics">Analytics</a></li>
+      <li><a style="background-color: coral;" class="btn btn-default" href="#!show">Show student Entries</a></li>
+    </ul>
+  </div>
+</nav>
+<div style="width: 50%;margin: 0 auto;" class="panel panel-default">
+  <div class="panel-heading" align="center"
+    style="background-color:coral;color: black;font-weight: bold;font-size: large; ">Add
+    Students Data</div>
+  <form style="outline: auto; background-color:rgb(127, 205, 247);" class="jumbotron text-center" name="myForm">
+    <div class="panel-body">
+      <label for="fname">Name:</label><br>
+      <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="fname" name="fname"
+        ng-model="fname" my-directive><br>
+      <span style="color:red;" ng-show="myForm.fname.$error.myDirective">
+        add valid name</span>
+      <pre>Date of Birth is: <em>{{dt | date:'fullDate' }}</em></pre>
+      <div style="display:inline-block; min-height:150px;">
+        <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
       </div>
+      <br>
+      <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+      <hr>
+      <span>Marks:</span>
+      <table align="center" class="table table-striped table-bordered">
+        <tr>
+          <td>Maths</td>
+          <td><input style="width: 30%;" type="number" class="form-control" id="maths" name="maths" ng-model="maths"
+              adult></td>
+          <td style="color:red;" ng-show="myForm.maths.$error.adult">
+            add valid marks</td>
+        </tr>
+        <tr>
+          <td>English</td>
+          <td><input style="width: 30%;" type="number" class="form-control" id="english" name="english"
+              ng-model="english" adult></td>
+          <td style="color:red;" ng-show="myForm.english.$error.adult">
+            add valid marks</td>
+        </tr>
+        <tr>
+          <td>Hindi</td>
+          <td><input style="width: 30%;" type="number" class="form-control" id="hindi" name="hindi" ng-model="hindi"
+              adult></td>
+          <td style="color:red;" ng-show="myForm.hindi.$error.adult">
+            add valid marks</td>
+        </tr>
+        <tr>
+          <td>Science</td>
+          <td><input style="width: 30%;" type="number" class="form-control" id="science" name="science"
+              ng-model="science" adult></td>
+          <td style="color:red;" ng-show="myForm.science.$error.adult">
+            add valid marks</td>
+        </tr>
+        <tr>
+          <td>French</td>
+          <td><input style="width: 30%;" type="number" class="form-control" id="french" name="french" ng-model="french"
+              adult></td>
+          <td style="color:red;" ng-show="myForm.french.$error.adult">
+            add valid marks</td>
+        </tr>
+      </table>
+      <label for="cgpa">CGPA:</label><br>
+      <input style="width: 50%; margin-left: 25%;" type="number" class="form-control" id="cgpa" name="cgpa"
+        ng-model="cgpa" min=4.0 max=10.0  total>
+        <span style="color:red;" ng-show="myForm.cgpa.$error.total">
+        invalid cgpa</span><br>
+      <label for="school">Choose Your School</label>
+      <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
+        id="school" name="school">
+        <option ng-repeat="s in school" value={{s.school}}>{{s.school}}</option>
+      </select>
+      <button type="submit" class="btn btn-danger" ng-click='consoleData()' ng-disabled="myForm.fname.$invalid">Add
+        Details</button><br>
+      <hr style=" background-color: black; height: 1px; border: 0;">
+    </div>
   </form>
-
 </div>
 <!DOCTYPE html>

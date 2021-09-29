@@ -1,0 +1,29 @@
+<div style="width: 50%;margin: 0 auto;" class="panel panel-default model-fade">
+    <div class="panel-heading" align="center"
+        style="background-color:coral;color: black;font-weight: bold;font-size: large; text-decoration: underline;">Add
+        Data</div>
+    <form style="outline: auto; background-color:rgb(127, 205, 247);" class="jumbotron text-center" name="myForm">
+        <div class="panel-body">
+            <label for="region">Region name</label><br>
+            <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
+                id="region" name="region" ng-model="region" field>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="West">West</option>
+                <option value="East">East</option>
+            </select><br>
+            <label for="city">City name</label><br>
+            <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="city" name="city"
+                ng-model="city" field><br>
+            <label for="area">Area name</label><br>
+            <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="area" name="area"
+                ng-model="area" field><br>
+            <span style="color:red;" ng-show="myForm.area.$error.field">
+                add valid area name</span><br>
+            <button type="submit" class="btn btn-success" ng-click='myfunc()' ng-disabled="myForm.fname.$invalid">Add
+                Details</button>
+            <button type="submit" class="btn btn-danger" ng-click='close()'
+                ng-disabled="myForm.fname.$invalid">Cancel</button><br>
+        </div>
+    </form>
+</div>

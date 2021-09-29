@@ -1,17 +1,29 @@
-app.controller('bigData', function ($scope, $http,$location) {
+app.controller('bigData', function ($scope, $http, $location,rolex) {
     $scope.fname = '';
-    $scope.branch = '';
-    $scope.marks = 0;
+    $scope.maths = 0;
+    $scope.english = 0;
+    $scope.hindi = 0;
+    $scope.science = 0;
+    $scope.french = 0;
+    $scope.cgpa = 4;
     $scope.school = '';
-    $scope.place = '';
     $scope.val = '';
-    if(!document.cookie){
-        $location.path('/');
-        console.log('Unauthorized User')
-    }
-    $scope.branchfunc = function () {
-        if (query.value) {
-            let queryy = { name: query.value }
+    $scope.array = '';
+    $scope.array2 = '';
+    $scope.city = '';
+    $scope.isCollapsed = false;
+    rolex.getRole();
+    $http.get('http://localhost:3000/getSchool')
+        .then(response => {
+            $scope.school = response.data;
+        });
+    $http.get('http://localhost:3000/city')
+        .then(response => {
+            $scope.city = response.data;
+        });
+    $scope.schoolfunc = function () {
+        if (school.value) {
+            let queryy = { name: school.value }
 
             $http.post('http://localhost:3000/myposts', queryy).then(function (response) {
                 $scope.val = response.data;
@@ -20,70 +32,111 @@ app.controller('bigData', function ($scope, $http,$location) {
             })
         }
     }
+    $scope.top3india = function () {
+        $http.post('http://localhost:3000/topindia').then(function (response) {
+            $scope.array = response.data;
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+    $scope.top3city = function () {
+        let queryy = { name: city.value };
+        $http.post('http://localhost:3000/topcity', queryy).then(function (response) {
+            $scope.array2 = response.data;
+        }).catch(err => {
+            console.log(err);
+        })
+    }
     $scope.val2 = '';
-    $scope.placefunc = function () {
-        if (query2.value) {
-            let quer = { name: query2.value }
-            $http.post('http://localhost:3000/place', quer).then(function (response) {
-                $scope.val2 = response.data;
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-
-    }
-    $scope.seed = function () {
-        for (let loop = query3.value; loop > 0; loop--) {
-            let n = '';
-            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-            let charactersLength = characters.length;
-            let x = Math.floor(Math.random() * 6 + 5);
-            for (let i = 0; i < x; i++) {
-                n += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            let rnd = Math.floor(Math.random() * 3);
-            let rnd2 = Math.floor(Math.random() * 5);
-            let rnd3 = Math.floor(Math.random() * 4);
-            let m = Math.floor(Math.random() * 100) + 1;
-            let b = ["cse", "ece", "csd"];
-            let s = ["DPS RK Puram", "DPS Nangloi", "DPS Krishna Nagar", "Sr, Sec GOVT. School", "The Doon School"];
-            let p = ["north", "south", "east", "west"];
-            let query = {
-                name: n,
-                branch: b[rnd],
-                marks: m,
-                school: s[rnd2],
-                place: p[rnd3]
-            };
-            console.log(query);
-            $http.post('http://localhost:3000/seed', query).then(function (response) {
-                console.log(response)
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-
-    }
     $scope.consoleData = function () {
         let qwerty = {
             name: fname.value,
-            branch: branch.value,
-            marks: marks.value,
+            maths: maths.value,
+            english: english.value,
+            hindi: hindi.value,
+            science: science.value,
+            french: french.value,
             school: school.value,
-            place: place.value
+            cgpa: cgpa.value
         }
-        if (fname.value.length >= 1 && branch.value.length >= 1) {
-
+        if (fname.value.length >= 3 && maths.value>=0 &&english.value>=0 &&hindi.value>=0 &&french.value>=0 &&science.value>=0) {
             console.log(qwerty);
             $http.post('http://localhost:3000/create', qwerty).then(function (response) {
                 console.log(response)
+                $location.path('/show');
             }).catch(err => {
                 console.log(err);
             })
         }
         else {
+            alert("Invalid Data")
+            console.log('Invalid Data')
             return;
         }
 
+    }
+    $scope.today = function () {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+
+    $scope.options = {
+        customClass: getDayClass,
+        minDate: new Date(),
+        showWeeks: true
+    };
+
+    // Disable weekend selection
+    function disabled(data) {
+        var date = data.date,
+            mode = data.mode;
+        return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+    }
+
+    $scope.toggleMin = function () {
+        $scope.options.minDate = $scope.options.minDate ? null : new Date();
+    };
+
+    $scope.toggleMin();
+
+    $scope.setDate = function (year, month, day) {
+        $scope.dt = new Date(year, month, day);
+    };
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date(tomorrow);
+    afterTomorrow.setDate(tomorrow.getDate() + 1);
+    $scope.events = [
+        {
+            date: tomorrow,
+            status: 'full'
+        },
+        {
+            date: afterTomorrow,
+            status: 'partially'
+        }
+    ];
+
+    function getDayClass(data) {
+        var date = data.date,
+            mode = data.mode;
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+            for (var i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+
+        return '';
     }
 })

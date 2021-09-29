@@ -1,15 +1,35 @@
-<div style="width: 50%;margin: 0 auto;"class="panel panel-primary" align="center" >
+<div style="width: 50%;margin: 0 auto;" align="center">
+  <div class="row" style="display: flex;">
+    <div class="column" style="flex:50%;padding: 5px;">
+      <img
+          src="https://img-premium.flaticon.com/png/512/2995/premium/2995459.png?token=exp=1631518317~hmac=da16a482966e08859d6095f31199714f"
+          alt="Snow" style="width:50%"><br>
+          <input type="checkbox" ng-model="isAgreed" ><br>
+          <button class="btn btn-info btn-lg" ng-click="myfunc()">Student</button>
+    </div>
+    <div class="column" style="flex: 50%;padding: 5px;">
+      <a href="http://localhost:3000/#!/adminlogin"><img
+          src="https://image.flaticon.com/icons/png/512/1436/1436766.png"
+          alt="Forest" style="width:50%"><br>
+          <button class="btn btn-danger btn-lg" type="submit">Admin</button>
+        </a>
+    </div>
+  </div>
+  </a>
+</div>
+<div  ng-hide="!isAgreed" style="width: 50%;margin: 0 auto;" class="panel panel-primary" align="center">
   <div class="panel-heading">Login</div>
   <div class="panel-body">
-  <form class=" text-center">
-    <br>
-    <input style="width: 50%; margin-left: 25%;" type="text"class="form-control" id="gname" ng-model='gname' name="gname" placeholder="Email"><br><br>
-    <input style="width: 50%; margin-left: 25%;" type="password" class="form-control" id="pw" name="pw" ng-model='pw' placeholder="Password"><br><br>
-    <button class="btn btn-success btn-lg" type="submit" id='btn' ng-click='sendingTheData()'>Login</button><br>
-    <div class="gap margin-base-vertical">
-      <h5 align="center">Don't have an account? <a href="http://localhost:3000/#!/signup">Create one</a></h5>
-    </div>
-  </form>
-</div>
-<div>
-  
+    <form class=" text-center">
+      <br>
+      <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="gname" ng-model='gname'
+        name="gname" placeholder="Email"><br><br>
+      <input style="width: 50%; margin-left: 25%;" type="password" class="form-control" id="pw" name="pw" ng-model='pw'
+        placeholder="Password"><br><br>
+      <button class="btn btn-success btn-lg" type="submit" id='btn' ng-click='sendingTheData()'>Login</button><br>
+      <div class="gap margin-base-vertical">
+        <h5 align="center">Don't have an account? <a href="http://localhost:3000/#!/signup">Create one</a></h5>
+      </div>
+    </form>
+  </div>
+  <div>

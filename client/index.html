@@ -8,21 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.7.7/angular-route.min.js"
         integrity="sha512-hA6PexsEPU6IEla/LCD+1kRcSzZzPL3XV0I2m3/wscW5b2SIFLtGKUuRsC3nRILwmq2lnpCsF75LvSPAJBy/NQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.8.2/angular-resource.min.js"
         integrity="sha512-heHqDjSgQ/iDnrNQqj9WFFYIS9nKYnWwb3VndZOvW1riVCWN9gsr98JEptFqmBl8Ru+3ubuGcHCYe2RJnA2PnA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script data-require="ui-bootstrap@*" data-semver="0.12.1"
-        src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script>
-    </script>
+    <!-- <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.min.js"></script> -->
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
     <script src="app.js"></script>
     <script src="./controllers/bigData.js"></script>
     <script src="./controllers/loginUpData.js"></script>
     <script src="./controllers/routes.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
     <script src="./controllers/showData.js"></script>
     <script src="./controllers/signUpData.js"></script>
     <title>Document</title>
@@ -34,21 +36,34 @@
             <div class="navbar-header">
                 <a class="navbar-brand">POSist</a>
             </div>
-            <ul class="nav navbar-nav">
-                <li><a href="#!add">Add Student Info</a></li>
-                <li><a href="#!analytics">Analytics</a></li>
-                <li><a href="#!show">Show student Entries</a></li>
-            </ul>
             <div style="float: right;">
                 <button class="btn btn-danger" ng-click="logout()">Logout</button>
             </div>
         </nav>
     </div>
-    <h3>{{mydata}}</h3>
+    <div style="float: right;" class="btn btn-success" id="clock">
+        <script>
+            var clockElement = document.getElementById('clock');
+
+            function clock() {
+                clockElement.textContent = new Date().toString();
+            }
+
+            setInterval(clock, 1000);
+        </script>
+    </div>
     <ng-view>
-
     </ng-view>
-
+    <script>$.bootstrapGrowl("Welcome", {
+            ele: 'body',
+            type: 'success',
+            offset: { from: 'top', amount: 20 },
+            align: 'right',
+            width: 250,
+            delay: 3000,
+            allow_dismiss: true,
+            stackup_spacing: 10
+        });</script>
 </body>
 
 </html>

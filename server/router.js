@@ -1,12 +1,53 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('./product');
+const admindata = require('./admindata');
+const adminSchool = require('./adminSchool');
+const adminCity = require('./adminCity');
 const authController = require('./authController');
+const { Aggregate } = require('mongoose');
 
 router.post('/signup', authController.signup_post);
 router.post('/login', authController.login_post);
 router.get('/logout', authController.logout_get)
 
+router.post('/adminsignup', authController.signup_admin);
+router.post('/adminlogin', authController.login_admin);
+router.get('/logout', authController.logout_get)
+
+router.get('/getSchool', (req, res) => {
+    adminSchool.find().select({ school: 1 }).then(a => res.json(a)).catch(err => console.log(err))
+});
+router.post('/getRegion', (req, res) => {
+    admindata.find().then(
+        function (data) {
+            return res.json(data)
+        }).catch(function (err) {
+            console.log(err)
+        })
+});
+router.post('/getarea', (req, res) => {
+    adminCity.find({ city: req.body.data.city }).then(
+        function (data) {
+            return res.json(data)
+        }).catch(function (err) {
+            console.log(err)
+        })
+})
+router.get('/city', (req, res) => {
+    adminSchool.find().select({ city: 1 }).then(a => res.json(a)).catch(err => console.log(err))
+})
+router.post('/getCity', (req, res) => {
+    admindata.find({ region: req.body.data.region }).then(
+        function (data) {
+            return res.json(data)
+        }).catch(function (err) {
+            console.log(err)
+        })
+})
+router.get('/showSchool', (req, res) => {
+    adminSchool.find().then(a => res.json(a)).catch(err => console.log(err));
+});
 router.post("/", (req, res) => {
     const pageOptions = {
         page: parseInt(req.body.page, 10) || 0,
@@ -30,19 +71,6 @@ router.get('/totalpages', (req, res) => {
         res.status(200);
     })
 
-    // cursorData.on("data", (data) => {
-    //     console.log("pages calculated")
-    //     list.push(data);
-    // });
-    // cursorData.on("end", () => {
-    //     res.status(200).json(list);
-    // });
-    // cursorData.on("error", (error) => {
-    //     return res.status(500).json({
-    //         error: error,
-    //         message: error.message
-    //     })
-    // })
 })
 
 router.post('/myposts', (req, res) => {
@@ -51,8 +79,8 @@ router.post('/myposts', (req, res) => {
 
     else {
         Post.aggregate([
-            { $match: { "branch": req.body.name } },
-            { $sort: { "marks": -1 } },
+            { $match: { "school": req.body.name } },
+            { $sort: { "cgpa": -1 } },
             { $limit: 3 }
         ]).then(data => {
             res.json(data)
@@ -61,48 +89,67 @@ router.post('/myposts', (req, res) => {
         })
     }
 })
-router.post('/place', (req, res) => {
-    if (!(req.body.name))
-        res.send('please fill the fields');
-
+router.post('/topindia', (req, res) => {
+    
     Post.aggregate([
-        { $match: { "place": req.body.name } },
-        { $sort: { "marks": -1 } },
+        { $sort: { "cgpa": -1 } },
         { $limit: 3 }
     ]).then(data => {
         res.json(data)
-        res.status(200);
+    }).catch(err => {
+        res.sendStatus(404);
     })
-        .catch(err => {
-            res.sendStatus(404);
-        })
+
 })
-router.post('/seed', (req, res) => {
-    const { name, branch, marks, school, place } = req.body
-    const bulk = Post.collection.initializeUnorderedBulkOp();
-    bulk.insert({
-        name: name,
-        branch: branch,
-        marks: marks,
-        school: school,
-        place: place
+router.post('/topcity', (req, res) => {
+    var topcity=req.body.name;
+    adminSchool.aggregate(
+        [
+            { $match: { city:topcity } }
+        ]
+    ).then(function (data) {
+        var schoolList = []
+        for (let i = 0; i < data.length; i++) {
+            schoolList.push(data[i].school);
+        }
+
+        var schoolAreaPip = [
+            {
+                $match: {
+                    school: {
+                        $in: schoolList
+                    }
+                }
+            },
+            { $sort: { "cgpa": -1 } },
+            { $limit: 3 }
+        ]
+        Post.aggregate(schoolAreaPip).then(function (data) {
+            return res.json(data)
+        }).catch(function (err) {
+            console.log(err)
+        })
+    }).catch(function (err) {
+        console.log(err)
     })
-    bulk.execute();
 
 })
 router.post('/create', (req, res) => {
-    const { name, branch, marks, school, place } = req.body
-    if (!(name && branch && marks && school && place))
+    const { name, maths, english, hindi, science, french, school, cgpa } = req.body
+    if (!(name && maths && english && hindi && science && french && school && cgpa))
         res.send('please fill all the fields');
     const bulk = Post.collection.initializeUnorderedBulkOp();
     bulk.find({ name: name }).upsert().updateOne(
         {
             $setOnInsert: {
                 name,
-                branch,
-                marks,
+                maths,
+                english,
+                hindi,
+                science,
+                french,
                 school,
-                place
+                cgpa
             }
         })
     bulk.execute().then(response => {
@@ -113,5 +160,55 @@ router.post('/create', (req, res) => {
     })
 
 })
+router.post('/send', (req, res) => {
+    const { city, region, area } = req.body
+    if (!(city && region && area))
+        res.send('please fill all the fields');
+    const bulk = admindata.collection.initializeUnorderedBulkOp();
+    bulk.find({ city: city }).upsert().updateOne(
+        {
+            $setOnInsert: {
+                city, region
+            }
+        })
+    bulk.execute().then(response => {
+        res.json(response.result.nMatched);
+        res.status(200);
+    }).catch(err => {
+        res.status(404).send('Operation failed ' + err)
+    })
+    const bulk2 = adminCity.collection.initializeUnorderedBulkOp();
+    bulk2.find({ area: area }).upsert().updateOne(
+        {
+            $setOnInsert: {
+                area, city
+            }
+        })
+    bulk2.execute().then(response => {
+        res.json(response.result.nMatched);
+        res.status(200);
+    }).catch(err => {
+        res.status(404).send('Operation failed ' + err)
+    })
 
+})
+router.post('/sendSchool', (req, res) => {
+    const { school, city, region, area } = req.body
+    if (!(school && city && region && area))
+        res.send('please fill all the fields');
+    const bulk = adminSchool.collection.initializeUnorderedBulkOp();
+    bulk.find({ school: school }).upsert().updateOne(
+        {
+            $setOnInsert: {
+                school, city, region, area
+            }
+        })
+    bulk.execute().then(response => {
+        res.json(response.result.nMatched);
+        res.status(200);
+    }).catch(err => {
+        res.status(404).send('Operation failed ' + err)
+    })
+
+})
 module.exports = router;

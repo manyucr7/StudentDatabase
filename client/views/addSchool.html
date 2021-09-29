@@ -1,0 +1,33 @@
+<div style="width: 50%;margin: 0 auto;" class="panel panel-default model-fade">
+    <div class="panel-heading" align="center"
+        style="background-color:coral;color: black;font-weight: bold;font-size: large; text-decoration: underline;">Add
+        School</div>
+    <form style="outline: auto; background-color:rgb(127, 205, 247);" class="jumbotron text-center" name="myForm">
+        <div class="panel-body">
+            <label for="region">Region name</label><br>
+            <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
+                id="region" name="region" ng-model="region" ng-change="getCity(region)" field>
+                <option ng-repeat="x in regionarray track by $index" value="{{x}}">{{x}}</option>
+            </select><br>
+            <label for="region">City name</label><br>
+            <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
+                id="city" name="city" ng-model="city" ng-change="getArea(city)"field>
+                <option ng-repeat="x in cityarray track by $index" value="{{x}}">{{x}}</option>
+            </select><br>
+            <label for="area">Area name</label><br>
+            <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
+                id="area" name="area" ng-model="area" field>
+                <option ng-repeat="x in areaarray track by $index" value="{{x}}">{{x}}</option>
+            </select><br>
+            <label for="fname">School name:</label><br>
+            <input style="width: 50%; margin-left: 25%;" type="text" class="form-control" id="school" name="school"
+                ng-model="school" my-directive><br>
+            <span style="color:red;" ng-show="myForm.fname.$error.myDirective">
+                add valid name</span><br>
+            <button type="submit" class="btn btn-success" ng-click='myfunc()' ng-disabled="myForm.fname.$invalid">Add
+                Details</button>
+            <button type="submit" class="btn btn-danger" ng-click='close()'
+                ng-disabled="myForm.fname.$invalid">Cancel</button><br>
+        </div>
+    </form>
+</div>

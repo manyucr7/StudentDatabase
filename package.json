@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "angular-growl": "^0.1.0",
     "angular-resource": "^1.8.2",
+    "angular-ui-bootstrap-datetimepicker": "^2.5.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cookieparser": "^0.1.0",

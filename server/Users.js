@@ -6,13 +6,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'please enter an email'],
         unique: true,
-        lowercase: true,
         validate: [isEmail, 'please enter a valid email']
     },
     password: {
         type: String,
         required: [true, 'please enter an password'],
-        minlength: [6, 'minimum password length is 6 characters']
 
     }
 });
@@ -21,6 +19,8 @@ UserSchema.statics.login = function (email, password) {
     return User.findOne({ email: email }).then(user => {
         if (password == user.password) {
             return user;
+        }else{
+            return "invalid";
         }
     }).catch(err => console.log(err));
 

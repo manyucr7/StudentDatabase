@@ -6,35 +6,16 @@ var cors = require('cors')
 const alienRouter = require('./router')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-var passport=require('passport');
-require('./config/passport')(passport);
-// const passport.authenticate('jwt', {session: false}) = (req, res, next) => {
-//   const token = req.cookies.jwt;
-//   //check json web token exists & is verified
-//   if (token) {
-//     jwt.verify(token, 'secret key', (err, decodedToken) => {
-//       if (err) {
-//         console.log(err.message);
-//         res.status(401);
-//         res.redirect('/');
-//       }else {
-//         res.status(200);
-//         console.log(decodedToken);
-//         next();
-//       }
-//     })
-//   }
-//   else{
-//     res.send('');
-//   }
-// }
+var passport = require('passport');
+
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('client'))
 app.use(cookieParser());
 app.use(alienRouter)
 app.use(passport.initialize());
-
+var auth = passport.authenticate('jwt', { session: false })
 mongoose.connect("mongodb+srv://manyu123:manyucr7@rest.xkl2a.mongodb.net/db?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
@@ -48,10 +29,20 @@ mongoose.connect("mongodb+srv://manyu123:manyucr7@rest.xkl2a.mongodb.net/db?retr
     process.exit(-1)
   })
 
-app.use('/', passport.authenticate('jwt', {session: false}),alienRouter)
-app.use('/posts', passport.authenticate('jwt', {session: false}), alienRouter)
-app.use('/myposts', passport.authenticate('jwt', {session: false}), alienRouter)
-app.use('/place', passport.authenticate('jwt', {session: false}), alienRouter)
-app.use('/seed', passport.authenticate('jwt', {session: false}), alienRouter)
-app.use('/create',passport.authenticate('jwt', {session: false}),alienRouter)
+app.post('/getRoleValue', (req, res) => {
+  var role = req.body.data.myrole;
+  require('./config/passport')(passport, role);
+  auth = passport.authenticate('jwt', { session: false })
+  res.send('done')
+})
+app.use('/', auth, alienRouter)
+app.use('/posts',auth, alienRouter)
+app.use('/myposts', auth, alienRouter)//analytics
+app.use('/topindia', auth, alienRouter)//analytics
+app.use('/topcity', auth, alienRouter)//analytics
+app.use('/create', auth, alienRouter)//add data
+app.use('/sendSchool',auth, alienRouter)//
+app.use('/getCity',auth, alienRouter)
+app.use('/getRegion',auth, alienRouter)
+app.use('/getarea', auth,alienRouter)
 app.listen(3000)
