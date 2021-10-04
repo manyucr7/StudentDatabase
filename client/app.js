@@ -21,7 +21,17 @@ var Interceptor = function () {
                 console.log('ERROR 400')
             }
             if (response.status === 401) {
-                console.log('ERROR 401')
+                console.log('ERROR 401');
+                $.bootstrapGrowl("Wrong Password", {
+                    ele: 'body',
+                    type: 'danger',
+                    offset: { from: 'top', amount: 20 },
+                    align: 'right',
+                    width: 250,
+                    delay: 3000,
+                    allow_dismiss: true,
+                    stackup_spacing: 10
+                });
             }
             if (response.status === 500) {
                 console.log('ERROR 500')
@@ -33,129 +43,8 @@ var Interceptor = function () {
         }
     }
 }
-app.controller('adminAddSchool', function ($http, $scope, $location, $uibModalInstance, $rootScope) {
-    $scope.removeDuplicate = function (arr) {
-        $scope.uniqueNames = [];
-        arr.forEach((val, i, arr) => {
-            if (!$scope.uniqueNames.includes(val)) {
-                $scope.uniqueNames.push(val);
-            }
-        });
-        return $scope.uniqueNames
-    }
-    $scope.getregionname = function () {
-        $scope.regionarray = [];
-        var data = {
-            my: "my"
-        }
-        $http.post('/getRegion', { data }).then(function (data) {
-            for (let i = 0; i < data.data.length; i++) {
-                $scope.regionarray.push(data.data[i].region)
-            }
-            $scope.regionarray = $scope.removeDuplicate($scope.regionarray)
-        }).catch(function (err) {
-            console.log(err)
-        })
-    }
-    $scope.getregionname();
-    $scope.getCity = function (region) {
-        $scope.cityarray = [];
-        var data = {
-            region: region
-        }
-        $http.post('/getCity', { data }).then(function (data) {
-
-            for (let i = 0; i < data.data.length; i++) {
-                $scope.cityarray.push(data.data[i].city)
-            }
-            $scope.cityarray = $scope.removeDuplicate($scope.cityarray)
-        }).catch(function (err) {
-            console.log(err)
-        })
-    };
-    $scope.getArea = function (city) {
-
-        $scope.areaarray = [];
-        var data = {
-            city: city
-        }
-        $http.post('/getarea', { data }).then(function (data) {
-
-            for (let i = 0; i < data.data.length; i++) {
-                $scope.areaarray.push(data.data[i].area)
-            }
-            $scope.areaarray = $scope.removeDuplicate($scope.areaarray)
-        }).catch(function (err) {
-            console.log(err)
-        })
-    }
-    $scope.myfunc = function () {
-        let qwerty = {
-            school: school.value,
-            city: city.value,
-            region: region.value,
-            area: area.value
-        }
-        if (school.value.length >= 1 && city.value.length >= 1) {
-            console.log(qwerty);
-            $http.post('http://localhost:3000/sendSchool', qwerty).then(function (response) {
-                console.log(response);
-                $rootScope.update();
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-
-        $uibModalInstance.close('save');
-    };
-    $scope.close = function () {
-        console.log("cancel");
-        $uibModalInstance.result.catch(function () { $uibModalInstance.close(); });
-        $uibModalInstance.dismiss('close');
-    }
-});
-app.controller('showSchoolData', function ($scope, rolex, $http, $location, $uibModal, $rootScope) {
-    if (!document.cookie) {
-        $location.path('/');
-        console.log('Unauthorized User');
-    }
-    rolex.getRole();
-    $scope.isCollapsed = false;
-    $scope.showPopup = function () {
-        $scope.modalInstance = $uibModal.open({
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "../views/addData.html",
-            controller: 'adminAddData',
-            controllerAs: '$ctrl',
-            size: 'lg'
-        });
-    }
-    $scope.addschool = function () {
-        $scope.modalInstance = $uibModal.open({
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: "../views/addSchool.html",
-            controller: 'adminAddSchool',
-            controllerAs: '$ctrl',
-            size: 'lg'
-        });
-
-    };
-    $scope.schools = [];
-    $rootScope.update = function () {
-        $scope.schools = [];
-        $http.get('http://localhost:3000/showSchool').then(function (response) {
-            $scope.schools = response.data;
-        }).catch(err => {
-            console.log(err);
-        });
-    };
-    $rootScope.update();
-});
-app.controller('myCtrl', function ($scope, $http, $location) {
-
-    $scope.logout = function () {
+app.service('logoutService', function ($rootScope, $location, $http) {
+    this.logout = function () {
 
         //growl.addSuccessMessage("SUCCESS_MESSAGE");
         $.bootstrapGrowl("logged out succesfully", {
@@ -169,11 +58,15 @@ app.controller('myCtrl', function ($scope, $http, $location) {
             stackup_spacing: 10
         });
         $http.get("http://localhost:3000/logout").then(function (response) {
-        });
+        }).catch(function (err) {
+            console.log(err)
+        })
         $location.path("/");
     };
+    $rootScope.currentPath = $location.path();
+})
+app.controller('myCtrl', function ($scope,$location) {
     $scope.currentPath = $location.path();
-
 })
 app.directive('myDirective', function () {
     return {
@@ -232,7 +125,7 @@ app.directive('total', function () {
 
                 var marks = Number(viewValue);
 
-                if (marks >= 4.0 && marks <= 10.0) // correct value
+                if (marks >= 0.0 && marks <= 10.0) // correct value
                 {
                     return true;
                 }
@@ -263,85 +156,6 @@ app.directive('field', function () {
         }
     };
 });
-app.controller('adminController', function ($scope, $http, $location, rolex) {
-    $scope.gname = "";
-    $scope.pw = "";
-    localStorage.setItem('roles', "admin");
-    rolex.getRole();
-    console.log(gname.value, pw.value)
-    $scope.sendingTheData = function () {
-        let url = "http://localhost:3000/adminlogin";
-        let data = {
-            gname: gname.value,
-            pw: pw.value,
-        }
-        $http.post(url, data).then(res => {
-            if (res.data.user) {
-                console.log(res.data.user);
-                $location.path('/showSchool');
-            }
-        }).catch(err => {
-            if (err.data.message == "invalid") {
-                $.bootstrapGrowl("Wrong Password", {
-                    ele: 'body',
-                    type: 'danger',
-                    offset: { from: 'top', amount: 20 },
-                    align: 'right',
-                    width: 250,
-                    delay: 3000,
-                    allow_dismiss: true,
-                    stackup_spacing: 10
-                });
-            }
-        })
-    }
-    $scope.sendTheData = function () {
-        console.log("signup")
-        let url = "http://localhost:3000/adminsignup";
-        let data = {
-            gname: gname.value,
-            pw: pw.value,
-        }
-        $http.post(url, data).then(res => {
-            console.log(res);
-            if (res.data.usr) {
-                console.log(res.data.usr);
-                $location.path('/adminlogin');
-            }
-        }).catch(err => {
-            console.log(err);
-        })
-    };
-});
-app.controller('adminAddData', function ($scope, $rootScope, $http, $location, $uibModalInstance) {
-    if (!document.cookie) {
-        $location.path('/');
-        console.log('Unauthorized User')
-    }
-
-    $scope.myfunc = function () {
-        let qwerty = {
-            city: city.value,
-            region: region.value,
-            area: area.value
-        }
-        if (city.value.length >= 1) {
-            console.log(qwerty);
-            $http.post('http://localhost:3000/send', qwerty).then(function (response) {
-                console.log(response);
-            }).catch(err => {
-                console.log(err);
-            })
-        }
-        $rootScope.update();
-        $uibModalInstance.close('save');
-    };
-    $scope.close = function () {
-        console.log("cancel");
-        $uibModalInstance.result.catch(function () { $uibModalInstance.close(); });
-        $uibModalInstance.dismiss('close');
-    }
-});
 app.service('serviceX', function ($http, $location, rolex) {
     this.loginData = function () {
         localStorage.setItem('roles', "student");
@@ -357,18 +171,8 @@ app.service('serviceX', function ($http, $location, rolex) {
                 $location.path('/show');
             }
         }).catch(err => {
-            if (err.data.message == "invalid") {
-                $.bootstrapGrowl("Wrong Password", {
-                    ele: 'body',
-                    type: 'danger',
-                    offset: { from: 'top', amount: 20 },
-                    align: 'right',
-                    width: 250,
-                    delay: 3000,
-                    allow_dismiss: true,
-                    stackup_spacing: 10
-                });
-            }
+            console.log(err);
+            
         })
 
     };

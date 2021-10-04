@@ -7,6 +7,9 @@
       <li><a style="background-color: coral;" class="btn btn-default" href="#!show">Show student Entries</a></li>
     </ul>
   </div>
+  <div style="float: right;">
+    <button class="btn btn-danger" ng-click="logout()">Logout</button>
+  </div>
 </nav>
 <div style="width: 50%;margin: 0 auto;" class="panel panel-default">
   <div class="panel-heading" align="center"
@@ -66,15 +69,17 @@
       </table>
       <label for="cgpa">CGPA:</label><br>
       <input style="width: 50%; margin-left: 25%;" type="number" class="form-control" id="cgpa" name="cgpa"
-        ng-model="cgpa" min=4.0 max=10.0  total>
-        <span style="color:red;" ng-show="myForm.cgpa.$error.total">
-        invalid cgpa</span><br>
+        ng-model="cgpa" min=0.0 max=10.0 total>
+      <span style="color:red;" ng-show="myForm.cgpa.$error.total">
+        invalid cgpa</span>
+        <button type="button" class="btn btn-sm btn-danger" ng-click="calc()">Calculate</button>
+        <br>
       <label for="school">Choose Your School</label>
       <select style="width: 50%; margin-left: 25%;" class="form-control" aria-label=".form-select-lg example"
         id="school" name="school">
         <option ng-repeat="s in school" value={{s.school}}>{{s.school}}</option>
       </select>
-      <button type="submit" class="btn btn-danger" ng-click='consoleData()' ng-disabled="myForm.fname.$invalid">Add
+      <button type="submit" class="btn btn-danger" ng-click='consoleData()' ng-disabled="myForm.fname.$invalid || myForm.CGPA.$invalid">Add
         Details</button><br>
       <hr style=" background-color: black; height: 1px; border: 0;">
     </div>

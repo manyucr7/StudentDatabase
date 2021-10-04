@@ -7,8 +7,6 @@ const alienRouter = require('./router')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 var passport = require('passport');
-
-
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static('client'))
@@ -28,7 +26,6 @@ mongoose.connect("mongodb+srv://manyu123:manyucr7@rest.xkl2a.mongodb.net/db?retr
     console.log(`db error ${err.message}`);
     process.exit(-1)
   })
-
 app.post('/getRoleValue', (req, res) => {
   var role = req.body.data.myrole;
   require('./config/passport')(passport, role);
@@ -36,6 +33,7 @@ app.post('/getRoleValue', (req, res) => {
   res.send('done')
 })
 app.use('/', auth, alienRouter)
+app.use('/info',alienRouter)
 app.use('/posts',auth, alienRouter)
 app.use('/myposts', auth, alienRouter)//analytics
 app.use('/topindia', auth, alienRouter)//analytics

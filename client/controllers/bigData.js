@@ -1,11 +1,11 @@
-app.controller('bigData', function ($scope, $http, $location,rolex) {
+app.controller('bigData', function ($scope,logoutService, $http, $location, rolex) {
     $scope.fname = '';
-    $scope.maths = 0;
-    $scope.english = 0;
-    $scope.hindi = 0;
-    $scope.science = 0;
-    $scope.french = 0;
-    $scope.cgpa = 4;
+    $scope.maths = undefined;
+    $scope.english = undefined;
+    $scope.hindi = undefined;
+    $scope.science = undefined;
+    $scope.french = undefined;
+    $scope.cgpa = undefined;
     $scope.school = '';
     $scope.val = '';
     $scope.array = '';
@@ -13,18 +13,24 @@ app.controller('bigData', function ($scope, $http, $location,rolex) {
     $scope.city = '';
     $scope.isCollapsed = false;
     rolex.getRole();
+    $scope.logout = function () {
+        logoutService.logout();
+    }
     $http.get('http://localhost:3000/getSchool')
         .then(response => {
             $scope.school = response.data;
+        }).catch(function (err) {
+            console.log(err)
         });
     $http.get('http://localhost:3000/city')
         .then(response => {
             $scope.city = response.data;
+        }).catch(function (err) {
+            console.log(err)
         });
     $scope.schoolfunc = function () {
         if (school.value) {
             let queryy = { name: school.value }
-
             $http.post('http://localhost:3000/myposts', queryy).then(function (response) {
                 $scope.val = response.data;
             }).catch(err => {
@@ -48,7 +54,21 @@ app.controller('bigData', function ($scope, $http, $location,rolex) {
         })
     }
     $scope.val2 = '';
+    $scope.calc=function(){
+        $scope.sum= ((Number(maths.value)+Number(english.value)+Number(hindi.value)+Number(science.value)+Number(french.value))/50);
+        $scope.cgpa=$scope.sum;
+    }
     $scope.consoleData = function () {
+        $scope.info = [];
+        var data = {
+            school: school.value
+        }
+        $http.post('/info', { data }).then(function (data) {
+            $scope.info.push(data);
+        }).catch(function (err) {
+            console.log(err)
+        })
+
         let qwerty = {
             name: fname.value,
             maths: maths.value,
@@ -59,7 +79,7 @@ app.controller('bigData', function ($scope, $http, $location,rolex) {
             school: school.value,
             cgpa: cgpa.value
         }
-        if (fname.value.length >= 3 && maths.value>=0 &&english.value>=0 &&hindi.value>=0 &&french.value>=0 &&science.value>=0) {
+        if (fname.value.length >= 3 && Number(maths.value)<=100 && Number(maths.value) >= 0 && Number(english.value)<=100 && Number(english.value) >= 0 && Number(hindi.value)<=100 && Number(hindi.value) >= 0 && Number(french.value)<=100 && Number(french.value) >= 0 && Number(science.value)<=100 && Number(science.value)>= 0) {
             console.log(qwerty);
             $http.post('http://localhost:3000/create', qwerty).then(function (response) {
                 console.log(response)

@@ -60,4 +60,5 @@ app.config(function ($routeProvider) {
       templateUrl: "../views/showSchoolData.html",
       controller: 'showSchoolData'
     })
+    .otherwise({redirectTo:'/'})
 });

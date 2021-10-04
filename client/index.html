@@ -27,6 +27,10 @@
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
     <script src="./controllers/showData.js"></script>
     <script src="./controllers/signUpData.js"></script>
+    <script src="./controllers/adminAddData.js"></script>
+    <script src="./controllers/adminAddSchool.js"></script>
+    <script src="./controllers/adminController.js"></script>
+    <script src="./controllers/showSchoolData.js"></script>
     <title>Document</title>
 </head>
 
@@ -36,22 +40,20 @@
             <div class="navbar-header">
                 <a class="navbar-brand">POSist</a>
             </div>
-            <div style="float: right;">
-                <button class="btn btn-danger" ng-click="logout()">Logout</button>
+            <div style="float: right;" class="btn btn-success" id="clock">
+                <script>
+                    var clockElement = document.getElementById('clock');
+    
+                    function clock() {
+                        clockElement.textContent = new Date().toString();
+                    }
+    
+                    setInterval(clock, 1000);
+                </script>
             </div>
         </nav>
     </div>
-    <div style="float: right;" class="btn btn-success" id="clock">
-        <script>
-            var clockElement = document.getElementById('clock');
 
-            function clock() {
-                clockElement.textContent = new Date().toString();
-            }
-
-            setInterval(clock, 1000);
-        </script>
-    </div>
     <ng-view>
     </ng-view>
     <script>$.bootstrapGrowl("Welcome", {
