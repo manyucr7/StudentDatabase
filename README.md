@@ -1,5 +1,5 @@
 # StudentDatabase
 
-##to run in terminal: node server/server
+## To run in terminal: node server/server
 
-##Open Localhost at port 8000
+## Open Localhost at port 8000
